@@ -10,11 +10,11 @@ set -ex
 
 if [ "$1" = "docker" ]; then
     TEST_BRANCH=${TEST_BRANCH:-android-4.4.4_r2.0.1}
-    TEST_URL=${TEST_URL:-https://android.googlesource.com/platform/manifest}
+    TEST_URL=${TEST_URL:-https://aosp.tuna.tsinghua.edu.cn/platform/manifest}
 
     cpus=$(grep ^processor /proc/cpuinfo | wc -l)
 
-    repo init --depth 1 -u "$TEST_URL" -b "$TEST_BRANCH"
+    repo init --depth 1 -u "$TEST_URL" -b "$TEST_BRANCH" --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
 
     # Use default sync '-j' value embedded in manifest file to be polite
     repo sync

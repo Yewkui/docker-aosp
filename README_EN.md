@@ -1,19 +1,9 @@
-# 极简Android源码编译环境
+Android Open Source Project Docker Build Environment
 ====================================================
 
 [![Docker Stars](https://img.shields.io/docker/stars/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
 [![ImageLayers](https://images.microbadger.com/badges/image/kylemanna/aosp.svg)](https://microbadger.com/#/images/kylemanna/aosp)
-
-这是一个帮助快速搭建Android源码编译环境的工具，项目fork自 [kylemanna/docker-aosp](https://github.com/kylemanna/docker-aosp)；针对Docker以及天朝的网络环境做了一部分修改，仅供China用户使用。
-
-## 使用步骤
-### 安装Docker
-
-### 准备工作
-
-### 开始下载编译
-
 
 Minimal build environment for AOSP with handy automation wrapper scripts.
 
