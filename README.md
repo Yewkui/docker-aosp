@@ -1,92 +1,49 @@
-# 极简Android源码编译环境
-====================================================
-
-[![Docker Stars](https://img.shields.io/docker/stars/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/kylemanna/aosp.svg)](https://hub.docker.com/r/kylemanna/aosp/)
-[![ImageLayers](https://images.microbadger.com/badges/image/kylemanna/aosp.svg)](https://microbadger.com/#/images/kylemanna/aosp)
+# 极简Android源码编译环境搭建工具
 
 这是一个帮助快速搭建Android源码编译环境的工具，项目fork自 [kylemanna/docker-aosp](https://github.com/kylemanna/docker-aosp)；针对Docker以及天朝的网络环境做了一部分修改，仅供China用户使用。
 
 ## 使用步骤
 ### 安装Docker
 
+由于Android源码庞大，依赖复杂；一旦使用的编译工具链有细微的不同就可能引发编译失败。[官方文档](https://source.android.com/source/initializing.html) 推荐使用Ubuntu 14.04进行编译。如果我们用Windows或者Mac系统，传统方式是使用虚拟机；但是在今天，我们完全可以使用 **Docker** 替代！！
+
+使用Docker，我们可以不用担心编译环境问题；不论我们的开发机是什么系统，可以使用Docker创建Ubuntu Image，并且直接在这个Ubuntu系统环境中创建编译所需要的工具链（JDK，ubuntu系统的依赖库等等）；而且，Docker运行的Ubuntu的系统开销比虚拟机低得多，这样下载以及编译速度就有了质的提升。更重要的是，这个环境可以作为一个Image打包发布！这样，你在不同的开发机，还有你与你的同事之间有了同一套编译环境，这会省去很多不必要的麻烦。关于Docker的更多内容，见 [Docker官网](http://www.docker.com/)
+
+Docker的下载地址见 [Docker下载](https://www.docker.com/products/overview) ；下载完毕安装即可。
+
 ### 准备工作
 
+如果你不是Mac系统，可以直接略过这一步。
+
+Mac的文件系统默认不区分大小写，这不满足Android源码编译系统的要求（编译的时候直接Error）；因此需要单独创建一个大小写敏感的磁盘映像。步骤如下：
+
+1. 打开Mac的系统软件：**磁盘工具**
+2. CMD + N，创建新的磁盘映像，参数设置如下图：
+
+    <img src="http://7xp3xc.com1.z0.glb.clouddn.com/201601/1483019239159.png" width="430"/>
+    
+    其中磁盘大小设置为 50~100G合适，**格式一定要选择带区分大小写标志的**
+ 
 ### 开始下载编译
 
+真正的下载编译过程相当简单，脚本会自动完成；步骤如下：
 
-Minimal build environment for AOSP with handy automation wrapper scripts.
+1. 设置Android源码下载存放的目录；如果是Mac系统，这一步必须设置为一个大小写敏感的目录；不然后面编译的时候会失败。如果不设置这一步，那么源码会下载到 `~/aosp-root` 目录；设置过程如下：
 
-Developers can use the Docker image to build directly while running the
-distribution of choice, without having to worry about breaking the delicate
-AOSP build due to package updates as is sometimes common on bleeding edge
-rolling distributions like Arch Linux.
+    `export AOSP_VOL=/Volume/Android/`
+    
+2. 下载wrapper脚本；如果需要下载其他系统版本，直接修改下载完毕后的build-nougat.sh文件的 android-4.4.4_r2.0.1改成你需要的分支即可，分支的信息见 [分支列表](https://source.android.com/source/build-numbers.html#source-code-tags-and-builds)
 
-Production build servers and integration test servers should also use the same
-Docker image and environment. This eliminates most surprise breakages by
-by empowering developers and production builds to use the exact same
-environment.  The devs will catch the issues with build environment first.
+    `curl -O https://raw.githubusercontent.com/kylemanna/docker-aosp/master/tests/build-nougat.sh`
+    
+3. 运行脚本，开始自动下载安装过程；Windows系统可以使用 [Bash for Windows](https://msdn.microsoft.com/en-us/commandline/wsl/about) 或者cygwin。
 
-This works well on Linux.  Running this via `boot2docker` (and friends) will
-result in a very painful performacne hit due to VirtualBox's `vboxsf` shared
-folder service which works terrible for **very** large file shares like AOSP.
-It might work, but consider yourself warned.  If you're aware of another way to
-get around this, send a pull request!
+    `bash ./build-nougat.sh`
 
+这样，所有的工作就都做完了。只需静静等待即可；时间视下载速度而定，清华的镜像速度还可以，笔者使用不到2小时就完成了下载编译过程。
 
-Quickstart
-----------
-
-For the terribly impatient.
-
-1. Make a directory to work and go there.
-2. Export the current directory as the persistent file store for the `aosp`
-   wrapper.
-3. Run a self contained build script, which does:
-    1. Attempts to fetch the `aosp` wrapper if not found locally.
-    2. Runs the `aosp` wrapper with an extra argument for the docker binary and
-       hints to the same script that when run later it's running in the docker
-       container.
-    3. The aosp wrapper then does it's magic which consists of fetching the
-       docker image if not found and forms all the necessary docker run
-       arguments seamlessly.
-    4. The docker container runs the other half the build script which
-       initializes the repo, fetches all source code, and builds.
-    5. In parallel you are expected to be drinking because I save you some time.
-
-            mkdir nougat ; cd nougat
-            export AOSP_VOL=$PWD
-            curl -O https://raw.githubusercontent.com/kylemanna/docker-aosp/master/tests/build-nougat.sh
-            bash ./build-nougat.sh
-
-    This takes about 2 hours to download and build on i5-2500k with 100Mb/s network connection.
-
-How it Works
-------------
-
-The Dockerfile contains the minimal packages necessary to build Android based
-on the main Ubuntu base image.
-
-The `aosp` wrapper is a simple wrapper to simplify invocation of the Docker
-image.  The wrapper ensures that a volume mount is accessible and has valid
-permissions for the `aosp` user in the Docker image (this unfortunately
-requires sudo).  It also forwards an ssh-agent in to the Docker container
-so that private git repositories can be accessed if needed.
-
-The intention is to use `aosp` to prefix all commands one would run in the
-Docker container.  For example to run `repo sync` in the Docker container:
-
-    aosp repo sync -j2
-
-The `aosp` wrapper doesn't work well with setting up environments, but with
-some bash magic, this can be side stepped with short little scripts.  See
-`tests/build-nougat.sh` for an example of a complete fetch and build of AOSP.
+## 感谢
+- [kylemanna/docker-aosp](https://github.com/kylemanna/docker-aosp)
+- [清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/)
 
 
-Tested
-------
-
-* Android Kitkat `android-4.4.4_r2.0.1`
-* Android Lollipop `android-5.0.2_r1`
-* Android Marshmallow `android-6.0.1_r72`
-* Android Nougat `android-7.0.0_r14`
