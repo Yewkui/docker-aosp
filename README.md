@@ -42,6 +42,13 @@ Mac的文件系统默认不区分大小写，这不满足Android源码编译系�
 
 这样，所有的工作就都做完了。只需静静等待即可；时间视下载速度而定，清华的镜像速度还可以，笔者使用不到2小时就完成了下载编译过程。
 
+## FAQ
+
+1. bash: run.sh: No such file or directory 
+    确保执行了第一步：正确地导出了环境变量 AOSP_VOL；Windows和Mac以及Linux上方式各不相同。
+2. ccache: FATAL: x_realloc: Could not allocate 8589934592 bytes
+    打开build脚本，注释掉使用ccache那一行。
+    
 ## 感谢
 - [kylemanna/docker-aosp](https://github.com/kylemanna/docker-aosp)
 - [清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/AOSP/)
