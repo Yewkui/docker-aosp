@@ -10,13 +10,13 @@ RUN apt-get update && apt-get install -y git-core gnupg flex bison gperf build-e
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -o jdk8.tgz https://android.googlesource.com/platform/prebuilts/jdk/jdk8/+archive/master.tar.gz \
+RUN curl -o jdk8.tgz http://weishu.dimensionalzone.com/jdk8-master.tar.gz \
  && tar -zxf jdk8.tgz linux-x86 \
  && mv linux-x86 /usr/lib/jvm/java-8-openjdk-amd64 \
  && rm -rf jdk8.tgz
 
-RUN curl -o /usr/local/bin/repo https://storage.googleapis.com/git-repo-downloads/repo \
- && echo "e147f0392686c40cfd7d5e6f332c6ee74c4eab4d24e2694b3b0a0c037bf51dc5  /usr/local/bin/repo" | sha256sum --strict -c - \
+RUN curl -o /usr/local/bin/repo http://weishu.dimensionalzone.com/repo \
+ && echo "d06f33115aea44e583c8669375b35aad397176a411de3461897444d247b6c220  /usr/local/bin/repo" | sha256sum --strict -c - \
  && chmod a+x /usr/local/bin/repo
 
 # All builds will be done by user aosp
