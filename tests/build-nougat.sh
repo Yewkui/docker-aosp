@@ -28,7 +28,7 @@ else
     aosp_url="https://raw.githubusercontent.com/kylemanna/docker-aosp/master/utils/aosp"
     args="bash run.sh docker"
     export AOSP_EXTRA_ARGS="-v $(cd $(dirname $0) && pwd -P)/$(basename $0):/usr/local/bin/run.sh:ro"
-    export AOSP_IMAGE="kylemanna/aosp:7.0-nougat"
+    # export AOSP_IMAGE="kylemanna/aosp:7.0-nougat"
 
     #
     # Try to invoke the aosp wrapper with the following priority:
@@ -39,8 +39,8 @@ else
     #
     if [ -n "$AOSP_BIN" ]; then
         $AOSP_BIN $args
-    elif [ -x "../utils/aosp" ]; then
-        ../utils/aosp $args
+    elif [ -x "../docker_aosp" ]; then
+        ../docker_aosp $args
     elif [ -n "$(type -P aosp)" ]; then
         aosp $args
     else
