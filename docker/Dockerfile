@@ -35,4 +35,4 @@ ENV CCACHE_DIR /tmp/ccache
 WORKDIR /aosp
 
 COPY docker_entrypoint.sh /root/docker_entrypoint.sh
-ENTRYPOINT ["/root/docker_entry.sh"]
+ENTRYPOINT ["/root/docker_entrypoint.sh"]

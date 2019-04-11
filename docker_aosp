@@ -2,14 +2,15 @@
 #
 # Simple AOSP wrapper to run commands in an AOSP docker container
 #
-# Author: Kyle Manna <kyle@kylemanna.com>
+# Author: Kyle Manna <kyle@kylemanna.com> weishu twsxtd@gmail.com
 #
 
 set -e
 
 # Override from environment
 
-AOSP_IMAGE=${AOSP_IMAGE:-kylemanna/aosp}
+AOSP_IMAGE=${AOSP_IMAGE:-weishu/build-aosp}
+echo 'AOSP IMAGE' ${AOSP_IMAGE}
 AOSP_ARGS=${AOSP_ARGS:---rm -it}
 
 AOSP_VOL=${AOSP_VOL:-~/aosp-root}
@@ -40,9 +41,9 @@ aosp_create_dir_if_needed $AOSP_VOL_CCACHE
 uid=$(id -u)
 
 # Set uid and gid to match host current user as long as NOT root
-if [ $uid -ne "0" ]; then
-    AOSP_HOST_ID_ARGS="-e USER_ID=$uid -e GROUP_ID=$(id -g)"
-fi
+# if [ $uid -ne "0" ]; then
+#     AOSP_HOST_ID_ARGS="-e USER_ID=$uid -e GROUP_ID=$(id -g)"
+# fi
 
 if [ -n "$SSH_AUTH_SOCK" ]; then
     SSH_AUTH_ARGS="-v $SSH_AUTH_SOCK:/tmp/ssh_auth -e SSH_AUTH_SOCK=/tmp/ssh_auth"
