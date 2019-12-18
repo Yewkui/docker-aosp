@@ -3,4 +3,4 @@
 	ui = auto
 [user]
 	name = Docker AOSP
-	email = aosp@aosp.docker.local
+	email = aosp@bytedance.com
