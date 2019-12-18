@@ -18,21 +18,21 @@ if [ -z ${USER_ID+x} ]; then USER_ID=1000; fi
 if [ -z ${GROUP_ID+x} ]; then GROUP_ID=1000; fi
 
 msg="docker_entrypoint: Creating user UID/GID [$USER_ID/$GROUP_ID]" && echo $msg
-groupadd -g $GROUP_ID -r aosp && \
-useradd -u $USER_ID --create-home -r -g aosp aosp
+groupadd -g $GROUP_ID -r yewkui && \
+useradd -u $USER_ID --create-home -r -g yewkui yewkui
 echo "$msg - done"
 
 msg="docker_entrypoint: Copying .gitconfig and .ssh/config to new user home" && echo $msg
-cp /root/.gitconfig /home/aosp/.gitconfig && \
-chown aosp:aosp /home/aosp/.gitconfig && \
-mkdir -p /home/aosp/.ssh && \
-cp /root/.ssh/config /home/aosp/.ssh/config && \
-chown aosp:aosp -R /home/aosp/.ssh &&
+cp /root/.gitconfig /home/yewkui/.gitconfig && \
+chown aosp:aosp /home/yewkui/.gitconfig && \
+mkdir -p /home/yewkui/.ssh && \
+cp /root/.ssh/config /home/yewkui/.ssh/config && \
+chown aosp:aosp -R /home/yewkui/.ssh &&
 echo "$msg - done"
 
 msg="docker_entrypoint: Creating /tmp/ccache and /aosp directory" && echo $msg
-mkdir -p /tmp/ccache /aosp
-chown aosp:aosp /tmp/ccache /aosp
+mkdir -p /tmp/ccache /yewkui
+chown yewkui:yewkui /tmp/ccache /yewkui
 echo "$msg - done"
 
 echo ""
@@ -44,5 +44,5 @@ if [ -z "$args" ]; then
 fi
 
 # Execute command as `aosp` user
-export HOME=/home/aosp
-exec sudo -E -u aosp $args
+export HOME=/home/yewkui
+exec sudo -E -u yewkui $args

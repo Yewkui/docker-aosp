@@ -4,9 +4,9 @@
 #
 FROM ubuntu:14.04
 
-MAINTAINER weishu <twsxtd@gmail.com>
+MAINTAINER Yewkui <wangyaohui.smile@bytedance.com>
 
-RUN apt-get update && apt-get install -y git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip python openjdk-7-jdk
+RUN apt-get update && apt-get install -y git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip python openjdk-7-jdk vim libssl-dev tofrodos  libswitch-perl lib32stdc++6 bc
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -14,6 +14,12 @@ RUN curl -o jdk8.tgz http://weishu.dimensionalzone.com/jdk8-master.tar.gz \
  && tar -zxf jdk8.tgz linux-x86 \
  && mv linux-x86 /usr/lib/jvm/java-8-openjdk-amd64 \
  && rm -rf jdk8.tgz
+
+RUN  locale-gen en_US.UTF-8 &&\
+     echo 'root:1234' | chpasswd
+
+USER ${USER_NAME}
+
 
 RUN curl -o /usr/local/bin/repo http://weishu.dimensionalzone.com/repo \
  && echo "d06f33115aea44e583c8669375b35aad397176a411de3461897444d247b6c220  /usr/local/bin/repo" | sha256sum --strict -c - \
